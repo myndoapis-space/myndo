@@ -91,48 +91,21 @@ export interface BriefingState {
   customQuestions?: BriefingQuestion[];
 }
 
-export interface SlideContent {
-  title: string;
-  subtitle?: string;
-  bullets: string[];
-  visualCue: string;
-}
-
 export interface UnitStrategy {
   unitName: string;
   directorName: string;
-  keyRequirements: string[];
+  internalInstructions: string[]; // List of specific tasks/directions for the director
+  requiredOutput: string[]; // What the director needs to produce for the proposal (e.g. "Visual Concept", "Media Plan XLS")
   estimatedHours: number;
-  recommendedSuppliers: string[];
-  slides: SlideContent[];
+  keyConstraints: string;
 }
 
 export interface OperationalPlan {
   clientSummary: string;
   strategicOverview: string;
   macroTasks: { phase: string; tasks: string[] }[];
-  unitStrategies: UnitStrategy[];
+  unitStrategies: UnitStrategy[]; // Internal directions per unit
   totalEstimatedDurationWeeks: number;
 }
 
 export type MagicWandAction = 'expand' | 'shorten' | 'formalize' | 'bullet_points';
-
-export type WireframeLayout = 
-  | 'minimal_title' 
-  | 'title_subtitle' 
-  | 'bullet_list' 
-  | 'split_left_img' 
-  | 'split_right_img' 
-  | 'three_columns' 
-  | 'big_number' 
-  | 'quote_focus' 
-  | 'timeline' 
-  | 'grid_gallery' 
-  | 'center_focus' 
-  | 'dark_contrast';
-
-export interface WireframeOption {
-  id: WireframeLayout;
-  name: string;
-  preview: string; // CSS class description or SVG path
-}

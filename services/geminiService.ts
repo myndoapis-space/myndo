@@ -64,7 +64,8 @@ export const generateOperationalPlan = async (brief: BriefingState): Promise<Ope
   const customQ = brief.customQuestions?.map(q => `- ${q.text}: ${brief.answers[q.id] || 'N/A'}`).join('\n') || '';
 
   const prompt = `
-    Genera un Piano Operativo dettagliato per un nuovo progetto cliente. RISPONDI RIGOROSAMENTE IN ITALIANO.
+    Agisci come Sara Serafini (COO). Hai ricevuto un brief commerciale da Giulio/Loris e devi attivare i Director Interni.
+    Genera un "Piano di Attivazione Interno" (Internal Kick-off) per costruire la proposta commerciale.
     
     CLIENTE: ${brief.clientName}
     LEAD: ${brief.lead}
@@ -83,13 +84,12 @@ export const generateOperationalPlan = async (brief: BriefingState): Promise<Ope
     
     TASK:
     1. Analizza il brief.
-    2. Definisci una strategia di alto livello.
-    3. Suddividi in macro task.
-    4. Per OGNI dipartimento attivo, genera una 'Unit Strategy' che includa:
-       - Assegnazione Director.
-       - Requisiti chiave.
-       - Ore stimate.
-       - 3 CONCEPT SLIDE per una presentazione (Titolo, Sottotitolo, Bullet points, Suggerimento Visual).
+    2. Definisci una strategia di alto livello (Overview per l'Account).
+    3. Per OGNI dipartimento attivo, genera una 'UnitStrategy' contenente ISTRUZIONI OPERATIVE PER IL DIRECTOR:
+       - internalInstructions: Cosa deve fare il director? (es. "Sviluppare concept grafico", "Stimare budget media").
+       - requiredOutput: Cosa deve consegnare all'Account per la presentazione? (es. "3 slide di concept", "Media Plan XLS").
+       - keyConstraints: Vincoli o note specifiche.
+       - estimatedHours: Stima ore per la fase di proposta.
     
     FORMATO OUTPUT JSON (Solo JSON, niente markdown):
     {
@@ -103,12 +103,10 @@ export const generateOperationalPlan = async (brief: BriefingState): Promise<Ope
         {
           "unitName": "string",
           "directorName": "string",
-          "keyRequirements": ["string"],
+          "internalInstructions": ["string"],
+          "requiredOutput": ["string"],
           "estimatedHours": number,
-          "recommendedSuppliers": ["string"],
-          "slides": [
-            { "title": "string", "subtitle": "string", "bullets": ["string"], "visualCue": "descrizione immagine/layout" }
-          ]
+          "keyConstraints": "string"
         }
       ]
     }

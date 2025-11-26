@@ -160,18 +160,19 @@ export const PEOPLE: AgencyRole[] = [
 ];
 
 export const GENERIC_ROLES: GenericRole[] = [
+  // --- MANAGEMENT & ACCOUNT ---
   {
     id: 'role_account',
     title: 'Account Manager',
-    description: 'Gestore operativo e finanziario della commessa.',
+    description: 'Gestore operativo, finanziario e relazionale della commessa.',
     responsibilities: [
       'Interfaccia principale con il Cliente',
-      'Responsabile della marginalità del progetto',
+      'Responsabile della marginalità (Budget Control)',
       'Guida la Task Force operativa'
     ],
-    tools: ['Cronos', 'OneDrive', 'Teams', 'Canva/Gamma'],
+    tools: ['Cronos (Project Mgmt)', 'OneDrive (Files)', 'Teams (Calls)', 'Canva/Gamma (Presentation)'],
     operational_flow: [
-      'Riceve strategia e crea il PREVENTIVO su Cronos (inserendo fornitori esterni e fee agenzia).',
+      'Riceve strategia e crea il PREVENTIVO su Cronos.',
       'Prepara il DECK di proposta (Canva/Gamma) e lo carica su OneDrive.',
       'A progetto vinto, converte il preventivo in COMMESSA su Cronos.',
       'Definisce i MACRO-TASK (Fasi) e i MICRO-TASK (Azioni) su Cronos con l\'Executive Director.',
@@ -182,13 +183,13 @@ export const GENERIC_ROLES: GenericRole[] = [
   {
     id: 'role_coo',
     title: 'COO (Chief Operating Officer)',
-    description: 'Orchestratore del traffico e delle risorse.',
+    description: 'Direzione Traffico, Risorse Umane e Supervisione Strategica.',
     responsibilities: [
-      'Analisi iniziale del Brief',
-      'Assegnazione risorse chiave',
+      'The Hub: Smistamento traffico in ingresso',
+      'Assegnazione Account e Task Force',
       'Problem solving su conflitti di risorse'
     ],
-    tools: ['Teams', 'Cronos (Report)', 'Email'],
+    tools: ['Teams', 'Cronos (Resource Planner)', 'Email'],
     operational_flow: [
       'Riceve input dal Commerciale (Giulio/Loris).',
       'Attiva i Director di Area necessari (The Hub).',
@@ -197,6 +198,156 @@ export const GENERIC_ROLES: GenericRole[] = [
       'Supervisiona il carico di lavoro globale dell\'agenzia.'
     ]
   },
+
+  // --- CREATIVE DEPT ---
+  {
+    id: 'role_art_director',
+    title: 'Art Director',
+    description: 'Responsabile della qualità visiva e del concept creativo.',
+    responsibilities: [
+      'Sviluppo Concept Visivi (Key Visual)',
+      'Supervisione Shooting',
+      'Direzione estetica output grafici'
+    ],
+    tools: ['Adobe Creative Suite', 'Canva (Template)', 'Pinterest/Behance', 'Cronos'],
+    operational_flow: [
+      'Riceve brief creativo dal Creative Director/Account.',
+      'Sviluppa moodboard e bozze grafiche.',
+      'Coordina i Graphic Designer per le declinazioni operative.',
+      'Carica i file aperti e definitivi su OneDrive.',
+      'Logga le ore su Cronos sotto il task "Creatività".'
+    ]
+  },
+  {
+    id: 'role_copywriter',
+    title: 'Copywriter',
+    description: 'Responsabile dei contenuti testuali e naming.',
+    responsibilities: [
+      'Ideazione Headline e Naming',
+      'Stesura testi per campagne/siti/social',
+      'Tone of Voice'
+    ],
+    tools: ['Word/Docs', 'Gamma (Presentation)', 'Cronos'],
+    operational_flow: [
+      'Brainstorming con Art Director e Creative Director.',
+      'Stesura testi e revisione bozze.',
+      'Caricamento testi su OneDrive.',
+      'Logga ore su Cronos.'
+    ]
+  },
+  {
+    id: 'role_graphic_designer',
+    title: 'Graphic Designer',
+    description: 'Esecutore tecnico degli asset visivi.',
+    responsibilities: [
+      'Impaginazione e declinazione asset',
+      'Fotoritocco',
+      'Rispetto brand guidelines'
+    ],
+    tools: ['Adobe Photoshop/Illustrator/Indesign', 'Cronos'],
+    operational_flow: [
+      'Riceve micro-task assegnato su Cronos.',
+      'Esegue la lavorazione tecnica.',
+      'Salva su OneDrive seguendo la nomenclatura corretta.',
+      'Chiude il task su Cronos loggando il tempo esatto.'
+    ]
+  },
+
+  // --- SOCIAL & PR ---
+  {
+    id: 'role_smm',
+    title: 'Social Media Manager',
+    description: 'Gestione canali social, piani editoriali e community.',
+    responsibilities: [
+      'Creazione PED (Piano Editoriale)',
+      'Gestione Community (Risposte)',
+      'Reportistica mensile'
+    ],
+    tools: ['Business Suite / Creator Studio', 'Canva', 'Cronos', 'Excel (PED)'],
+    operational_flow: [
+      'Crea il PED mensile e lo condivide con Account per approvazione cliente.',
+      'Richiede asset grafici al reparto creativo tramite Account/Exec.',
+      'Programma i post approvati.',
+      'Monitora commenti e messaggi giornalmente.',
+      'Compila report fine mese e lo carica su OneDrive.'
+    ]
+  },
+  {
+    id: 'role_pr',
+    title: 'PR Specialist',
+    description: 'Gestione relazioni media e ufficio stampa.',
+    responsibilities: [
+      'Stesura Comunicati Stampa',
+      'Relazione con giornalisti/testate',
+      'Rassegna Stampa'
+    ],
+    tools: ['Mailchimp/Newsletter', 'Database Giornalisti', 'Cronos'],
+    operational_flow: [
+      'Redazione comunicato stampa.',
+      'Invio a liste target.',
+      'Follow-up telefonico.',
+      'Raccolta rassegna stampa e caricamento su OneDrive.'
+    ]
+  },
+
+  // --- DIGITAL & TECH ---
+  {
+    id: 'role_digital_strategist',
+    title: 'Digital Strategist (SEO/SEM)',
+    description: 'Ottimizzazione performance e visibilità online.',
+    responsibilities: [
+      'Audit SEO',
+      'Setup Campagne Google Ads',
+      'Analisi Dati e Funnel'
+    ],
+    tools: ['Google Analytics', 'Semrush', 'Google Ads', 'Cronos'],
+    operational_flow: [
+      'Analisi preliminare sito/competitor.',
+      'Setup tecnico tracciamenti (GTM, GA4).',
+      'Ottimizzazione campagne attiva.',
+      'Reportistica performance.'
+    ]
+  },
+  {
+    id: 'role_web_dev',
+    title: 'Web Developer',
+    description: 'Sviluppo e manutenzione siti web.',
+    responsibilities: [
+      'Coding Frontend/Backend',
+      'Manutenzione WordPress/Custom',
+      'Gestione Server/Hosting'
+    ],
+    tools: ['VS Code', 'GitHub/GitLab', 'Figma (per layout)', 'Cronos'],
+    operational_flow: [
+      'Riceve layout grafico (Figma) dal reparto creativo.',
+      'Sviluppo in ambiente di Staging.',
+      'Test cross-browser.',
+      'Messa in produzione (Go Live).',
+      'Log ore sviluppo su Cronos.'
+    ]
+  },
+
+  // --- EVENTS ---
+  {
+    id: 'role_event_producer',
+    title: 'Event Producer',
+    description: 'Logistica e produzione esecutiva eventi.',
+    responsibilities: [
+      'Scouting Location',
+      'Gestione Fornitori Tecnici (Audio/Video)',
+      'Regia Evento'
+    ],
+    tools: ['Cronos (Budget)', 'Excel (Run Sheet)', 'Maps'],
+    operational_flow: [
+      'Sopralluogo tecnico location.',
+      'Richiesta preventivi fornitori e caricamento su Cronos.',
+      'Creazione Run Sheet (Scaletta) evento.',
+      'Coordinamento allestimento on-site.',
+      'Supervisione smontaggio.'
+    ]
+  },
+
+  // --- MANAGEMENT ---
   {
     id: 'role_director',
     title: 'Director (Creative, Media, Events, Tech)',
@@ -206,13 +357,12 @@ export const GENERIC_ROLES: GenericRole[] = [
       'Innovazione',
       'Supporto all\'Account in fase di vendita'
     ],
-    tools: ['Teams', 'OneDrive', 'Tool Specifici (es. Meta Ads, Adobe Suite)'],
+    tools: ['Teams', 'OneDrive', 'Tool Specifici'],
     operational_flow: [
       'Riceve attivazione dal COO.',
       'Produce la strategia di reparto (es. Media Plan, Creative Concept).',
       'Carica i materiali strategici su OneDrive nella cartella di progetto.',
-      'Delega l\'esecuzione operativa all\'Executive Director.',
-      'Interviene in meeting strategici con il cliente.'
+      'Delega l\'esecuzione operativa all\'Executive Director.'
     ]
   },
   {
@@ -229,26 +379,7 @@ export const GENERIC_ROLES: GenericRole[] = [
       'Affianca l\'Account nella definizione dei Micro-Task su Cronos.',
       'Stima le ore necessarie per ogni task operativo.',
       'Assegna i task ai singoli operativi (Specialism) su Cronos.',
-      'Controlla che il team logghi correttamente le ore (Timesheet).',
-      'Verifica che l\'output rispetti gli standard prima della consegna all\'Account.'
-    ]
-  },
-  {
-    id: 'role_operative',
-    title: 'Specialism (Grafico, SMM, Dev)',
-    description: 'Esecutore materiale del progetto.',
-    responsibilities: [
-      'Produzione output',
-      'Rispetto delle deadline',
-      'Compilazione Timesheet'
-    ],
-    tools: ['Cronos', 'OneDrive', 'Adobe/Dev Tools', 'Teams'],
-    operational_flow: [
-      'Riceve notifica del Micro-Task su Cronos.',
-      'Esegue il lavoro (Grafica, Post, Codice).',
-      'Carica i file definitivi su OneDrive (NO Desktop locale).',
-      'Compila il Timesheet giornaliero su Cronos associandolo al Micro-Task.',
-      'Comunica aggiornamenti veloci via Teams chat di progetto.'
+      'Controlla che il team logghi correttamente le ore (Timesheet).'
     ]
   },
   {
@@ -264,8 +395,7 @@ export const GENERIC_ROLES: GenericRole[] = [
     operational_flow: [
       'Riceve notifica da Account quando un preventivo diventa Commessa Confermata.',
       'Emette fattura di acconto (se prevista).',
-      'Raccoglie fatture fornitori approvate dagli Account.',
-      'Esegue review mensile con il CEO sui flussi.'
+      'Raccoglie fatture fornitori approvate dagli Account.'
     ]
   },
   {
@@ -281,8 +411,7 @@ export const GENERIC_ROLES: GenericRole[] = [
     operational_flow: [
       'Ingaggia nuovi clienti (Lead Generation).',
       'Agisce come Client Director sui clienti strategici.',
-      'Definisce gli obiettivi annuali di fatturato.',
-      'Supervisiona i report finanziari mensili con l\'Amministrazione.'
+      'Definisce gli obiettivi annuali di fatturato.'
     ]
   }
 ];

@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { BriefingState, Department, OperationalPlan, BriefingQuestion, MagicWandAction, WireframeLayout, WireframeOption } from '../types';
+import { BriefingState, Department, OperationalPlan, BriefingQuestion, MagicWandAction } from '../types';
 import { generateOperationalPlan, refineText } from '../services/geminiService';
-import { ArrowRight, BrainCircuit, FileText, Loader2, RefreshCw, Send, ChevronRight, Wand2, Plus, ArrowUp, ArrowDown, Download, Monitor, Trash2, LayoutTemplate, Presentation, FileJson } from 'lucide-react';
+import { ArrowRight, BrainCircuit, FileText, Loader2, RefreshCw, Plus, ArrowUp, ArrowDown, Download, Trash2, CheckCircle2, Megaphone, Users, Clock } from 'lucide-react';
 
 const DEPARTMENTS: Department[] = ['Creative', 'Media', 'Digital', 'Events', 'Strategic', 'PR'];
 
@@ -22,21 +22,6 @@ const INITIAL_QUESTIONS: BriefingQuestion[] = [
   { id: 'q_channels', text: 'Canali Media da attivare?', type: 'text', department: 'Media' },
   { id: 'q_tech', text: 'Stack Tecnologico attuale?', type: 'text', department: 'Digital' },
   { id: 'q_event_type', text: 'Tipologia Evento?', type: 'text', department: 'Events' },
-];
-
-const WIREFRAMES: WireframeOption[] = [
-  { id: 'minimal_title', name: 'Minimal Title', preview: 'border-2 border-slate-300 flex items-center justify-center font-bold text-xs' },
-  { id: 'title_subtitle', name: 'Title & Intro', preview: 'border-2 border-slate-300 flex flex-col justify-center items-center gap-1' },
-  { id: 'bullet_list', name: 'Standard Bullets', preview: 'border-2 border-slate-300 flex flex-col p-2 gap-1' },
-  { id: 'split_left_img', name: 'Split Left Img', preview: 'border-2 border-slate-300 grid grid-cols-2 gap-1' },
-  { id: 'split_right_img', name: 'Split Right Img', preview: 'border-2 border-slate-300 grid grid-cols-2 gap-1' },
-  { id: 'three_columns', name: 'Three Columns', preview: 'border-2 border-slate-300 grid grid-cols-3 gap-1 p-1' },
-  { id: 'big_number', name: 'Big Data Focus', preview: 'border-2 border-slate-300 flex items-center justify-center' },
-  { id: 'quote_focus', name: 'Quote / Testimonial', preview: 'border-2 border-slate-300 flex items-center justify-center italic' },
-  { id: 'timeline', name: 'Timeline Steps', preview: 'border-2 border-slate-300 flex items-end justify-around pb-1' },
-  { id: 'grid_gallery', name: 'Grid Gallery', preview: 'border-2 border-slate-300 grid grid-cols-2 grid-rows-2 gap-0.5' },
-  { id: 'center_focus', name: 'Center Core', preview: 'border-2 border-slate-300 flex items-center justify-center' },
-  { id: 'dark_contrast', name: 'Dark Impact', preview: 'bg-slate-800 border-2 border-slate-800' },
 ];
 
 const MagicWandInput: React.FC<{
@@ -82,7 +67,7 @@ const MagicWandInput: React.FC<{
           className="p-1.5 bg-indigo-50 text-indigo-600 rounded-md hover:bg-indigo-100 transition-colors"
           title="AI Magic Wand"
         >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <BrainCircuit className="w-4 h-4" />}
         </button>
         
         {/* Menu */}
@@ -99,73 +84,8 @@ const MagicWandInput: React.FC<{
   );
 };
 
-// --- WIREFRAME RENDERER COMPONENT ---
-const SlideRenderer: React.FC<{ layout: WireframeLayout, content: any }> = ({ layout, content }) => {
-  const common = "w-full h-full p-8 flex flex-col overflow-hidden";
-  
-  switch(layout) {
-    case 'minimal_title':
-      return <div className={`${common} justify-center items-center text-center`}>
-        <h1 className="text-4xl font-bold text-slate-900">{content.title}</h1>
-      </div>;
-    case 'title_subtitle':
-      return <div className={`${common} justify-center items-center text-center`}>
-         <h1 className="text-4xl font-bold text-slate-900 mb-4">{content.title}</h1>
-         <p className="text-xl text-slate-500">{content.subtitle}</p>
-      </div>;
-    case 'split_left_img':
-      return <div className="w-full h-full grid grid-cols-2">
-         <div className="bg-slate-200 flex items-center justify-center text-slate-400 text-sm uppercase font-bold p-8 text-center">{content.visualCue}</div>
-         <div className="p-8 flex flex-col justify-center">
-            <h2 className="text-2xl font-bold mb-4">{content.title}</h2>
-            <ul className="space-y-2">{content.bullets.map((b: string, i: number) => <li key={i} className="text-sm">• {b}</li>)}</ul>
-         </div>
-      </div>;
-    case 'split_right_img':
-      return <div className="w-full h-full grid grid-cols-2">
-         <div className="p-8 flex flex-col justify-center bg-white">
-            <h2 className="text-2xl font-bold mb-4">{content.title}</h2>
-            <p className="text-slate-500 mb-4">{content.subtitle}</p>
-            <ul className="space-y-2">{content.bullets.map((b: string, i: number) => <li key={i} className="text-sm text-slate-700">• {b}</li>)}</ul>
-         </div>
-         <div className="bg-slate-200 flex items-center justify-center text-slate-400 text-sm uppercase font-bold p-8 text-center">{content.visualCue}</div>
-      </div>;
-    case 'dark_contrast':
-      return <div className={`${common} bg-slate-900 text-white justify-center`}>
-        <h2 className="text-3xl font-bold mb-6 text-indigo-400">{content.title}</h2>
-        <ul className="space-y-3">{content.bullets.map((b: string, i: number) => <li key={i} className="text-lg text-slate-300">• {b}</li>)}</ul>
-      </div>;
-    case 'big_number':
-      return <div className={`${common} justify-center items-center`}>
-        <div className="text-6xl font-black text-indigo-600 mb-4">0{Math.floor(Math.random() * 9) + 1}</div>
-        <h2 className="text-2xl font-bold text-slate-800">{content.title}</h2>
-        <p className="text-center text-slate-500 mt-2 max-w-md">{content.subtitle}</p>
-      </div>;
-    case 'three_columns':
-      return <div className={`${common}`}>
-        <h2 className="text-2xl font-bold mb-8 text-center">{content.title}</h2>
-        <div className="grid grid-cols-3 gap-4 h-full">
-           {[0,1,2].map(i => (
-             <div key={i} className="bg-slate-50 p-4 rounded border border-slate-100 flex flex-col">
-               <div className="w-8 h-8 rounded-full bg-indigo-100 mb-2"></div>
-               <p className="text-xs text-slate-600 flex-1">{content.bullets[i] || 'Contento placeholder...'}</p>
-             </div>
-           ))}
-        </div>
-      </div>;
-    default: // bullet_list fallback
-      return <div className={`${common} justify-center`}>
-         <h2 className="text-3xl font-bold mb-2 text-indigo-900">{content.title}</h2>
-         <h3 className="text-lg text-indigo-500 mb-8">{content.subtitle}</h3>
-         <ul className="space-y-3 pl-5 border-l-4 border-indigo-200">
-           {content.bullets.map((b: string, i: number) => <li key={i} className="text-base text-slate-700">{b}</li>)}
-         </ul>
-      </div>;
-  }
-};
-
 const ProcessSimulator: React.FC = () => {
-  const [step, setStep] = useState(0); // 0=Setup, 1=Depts, 2=Brief, 3=Plan, 4=Wireframe, 5=Slides
+  const [step, setStep] = useState(0); // 0=Setup, 1=Depts, 2=Brief, 3=Plan(Results)
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<BriefingQuestion[]>(INITIAL_QUESTIONS);
   const [state, setState] = useState<BriefingState>({
@@ -176,7 +96,6 @@ const ProcessSimulator: React.FC = () => {
     customQuestions: []
   });
   const [plan, setPlan] = useState<OperationalPlan | null>(null);
-  const [selectedWireframe, setSelectedWireframe] = useState<WireframeLayout | null>(null);
 
   // Filter questions based on selected departments
   const activeQuestions = questions.filter(q => 
@@ -242,22 +161,16 @@ const ProcessSimulator: React.FC = () => {
     setState({ clientName: '', lead: null, selectedDepartments: [], answers: {} });
     setPlan(null);
     setQuestions(INITIAL_QUESTIONS);
-    setSelectedWireframe(null);
   };
 
-  const downloadDoc = () => {
-    if (!plan) return;
-    const content = `CLIENTE: ${state.clientName}\nSTRATEGIA:\n${plan.strategicOverview}\n...`;
+  const downloadBrief = (unitName: string, instructions: string[]) => {
+    const content = `BRIEF OPERATIVO PER: ${unitName.toUpperCase()}\nCLIENTE: ${state.clientName}\n\nISTRUZIONI:\n${instructions.join('\n- ')}`;
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Strategia_${state.clientName}.doc`;
+    a.download = `Brief_${unitName}_${state.clientName}.txt`;
     a.click();
-  };
-
-  const downloadPresentation = () => {
-    alert("Scaricamento PPTX avviato... (Simulazione)");
   };
 
   return (
@@ -266,14 +179,14 @@ const ProcessSimulator: React.FC = () => {
       <div className="bg-slate-900 p-6 text-white flex justify-between items-center">
         <div>
            <h2 className="text-2xl font-bold flex items-center gap-2">
-             <BrainCircuit className="w-6 h-6 text-indigo-400" />
-             AI Strategic Briefing
+             <Megaphone className="w-6 h-6 text-rose-500" />
+             The Hub: Internal Briefing
            </h2>
-           <p className="text-slate-400 text-sm">Magic Wand & Slide Generator</p>
+           <p className="text-slate-400 text-sm">Direzione Strategica & Attivazione Unit</p>
         </div>
         <div className="flex gap-2">
-           {[0, 1, 2, 3, 4, 5].map(s => (
-             <div key={s} className={`w-3 h-3 rounded-full ${step === s ? 'bg-indigo-500' : 'bg-slate-700'}`} />
+           {[0, 1, 2, 3].map(s => (
+             <div key={s} className={`w-3 h-3 rounded-full ${step >= s ? 'bg-rose-500' : 'bg-slate-700'}`} />
            ))}
         </div>
       </div>
@@ -328,8 +241,8 @@ const ProcessSimulator: React.FC = () => {
         {/* STEP 1: UNITS */}
         {step === 1 && (
           <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-             <h3 className="text-xl font-bold text-slate-800">2. Quali Unit attiviamo?</h3>
-             <p className="text-slate-500">Seleziona i dipartimenti necessari. Il brief si adatterà automaticamente.</p>
+             <h3 className="text-xl font-bold text-slate-800">2. Chi dobbiamo attivare?</h3>
+             <p className="text-slate-500">Seleziona i dipartimenti necessari per questo progetto.</p>
              
              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {DEPARTMENTS.map(dept => (
@@ -369,8 +282,8 @@ const ProcessSimulator: React.FC = () => {
         {step === 2 && (
            <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
              <div className="text-center mb-8">
-               <h3 className="text-2xl font-bold text-slate-800">3. Agency Briefing</h3>
-               <p className="text-slate-500">Usa la "Bacchetta Magica" per migliorare le risposte o aggiungi domande custom.</p>
+               <h3 className="text-2xl font-bold text-slate-800">3. Raccolta Informazioni</h3>
+               <p className="text-slate-500">Le informazioni qui sotto serviranno per istruire i Director.</p>
              </div>
 
              <div className="flex justify-end mb-4">
@@ -414,7 +327,7 @@ const ProcessSimulator: React.FC = () => {
                         value={state.answers[q.id] || ''}
                         onChange={(val) => handleAnswer(q.id, val)}
                         multiline={q.type === 'textarea'}
-                        placeholder="Scrivi qui (usa la bacchetta magica per AI)..."
+                        placeholder="Rispondi qui..."
                       />
                     </div>
                  </div>
@@ -426,136 +339,99 @@ const ProcessSimulator: React.FC = () => {
                <button
                 onClick={generatePlan}
                 disabled={loading}
-                className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 shadow-lg shadow-indigo-200 flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-rose-600 to-orange-600 text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 shadow-lg shadow-rose-200 flex items-center justify-center gap-2"
               >
-                {loading ? <Loader2 className="animate-spin" /> : <><BrainCircuit /> Genera Strategia & Slide</>}
+                {loading ? <Loader2 className="animate-spin" /> : <><CheckCircle2 /> Genera Piano di Attivazione</>}
               </button>
              </div>
            </div>
         )}
 
-        {/* STEP 3: RESULTS (STRATEGY OVERVIEW) */}
+        {/* STEP 3: INTERNAL KICK-OFF PLAN */}
         {step === 3 && plan && (
-           <div className="max-w-6xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex justify-between items-center bg-slate-50 p-6 rounded-xl border border-slate-200">
-                 <div>
-                   <h2 className="text-3xl font-bold text-slate-900">{state.clientName}</h2>
-                   <p className="text-slate-500">Durata Stimata: {plan.totalEstimatedDurationWeeks} Settimane</p>
-                 </div>
-                 <div className="flex gap-2">
-                   <button 
-                     onClick={downloadDoc}
-                     className="bg-white border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-slate-50"
-                   >
-                     <FileText className="w-5 h-5" /> Scarica Doc (Word/PDF)
-                   </button>
-                   <button 
-                     onClick={() => setStep(4)} // Go to Wireframe Selection
-                     className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 hover:bg-indigo-700 shadow-lg shadow-indigo-200"
-                   >
-                     <Presentation className="w-5 h-5" /> Crea Slide & Presentazione
-                   </button>
-                 </div>
-              </div>
-
-              {/* OVERVIEW */}
-              <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                 <h4 className="font-bold text-slate-400 uppercase text-xs mb-4">Overview Strategica</h4>
-                 <p className="text-lg text-slate-800 leading-relaxed font-serif italic">"{plan.strategicOverview}"</p>
-              </div>
-
-              {/* Simple list of units (Detail hidden until slides) */}
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                 {plan.unitStrategies.map((u, i) => (
-                   <div key={i} className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                      <div className="text-xs font-bold uppercase text-slate-400 mb-1">Unit</div>
-                      <div className="font-bold text-slate-800">{u.unitName}</div>
-                      <div className="text-xs text-slate-500 mt-2">Director: {u.directorName}</div>
-                   </div>
-                 ))}
-               </div>
-           </div>
-        )}
-
-        {/* STEP 4: WIREFRAME SELECTION */}
-        {step === 4 && (
-          <div className="max-w-5xl mx-auto animate-in fade-in zoom-in-95 duration-300">
-            <h3 className="text-2xl font-bold text-center mb-2 text-slate-800">Scegli il Wireframe Grafico</h3>
-            <p className="text-center text-slate-500 mb-8">Seleziona uno dei 12 layout per generare automaticamente le slide.</p>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {WIREFRAMES.map((wf) => (
-                <button
-                  key={wf.id}
-                  onClick={() => { setSelectedWireframe(wf.id); setStep(5); }}
-                  className="group bg-white rounded-xl border-2 border-slate-200 hover:border-indigo-500 hover:shadow-xl transition-all p-4 text-left flex flex-col gap-3"
-                >
-                  <div className={`h-24 bg-slate-50 rounded-lg w-full ${wf.preview}`}>
-                     <div className="w-1/2 h-2 bg-slate-300 rounded mb-1"></div>
-                     <div className="w-3/4 h-2 bg-slate-200 rounded"></div>
-                  </div>
-                  <span className="font-bold text-slate-700 group-hover:text-indigo-600">{wf.name}</span>
-                </button>
-              ))}
-            </div>
-            
-            <div className="mt-8 text-center">
-              <button onClick={() => setStep(3)} className="text-slate-400 hover:text-slate-600 font-bold text-sm">Indietro</button>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 5: SLIDES EDITOR */}
-        {step === 5 && plan && selectedWireframe && (
-           <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-                  <LayoutTemplate className="w-5 h-5 text-indigo-600" />
-                  Slide Editor: {WIREFRAMES.find(w => w.id === selectedWireframe)?.name}
-                </h3>
-                <div className="flex gap-2">
-                  <button onClick={() => setStep(4)} className="text-slate-500 font-bold px-4 py-2 hover:bg-slate-100 rounded-lg">Cambia Layout</button>
-                  <button 
-                    onClick={downloadPresentation}
-                    className="bg-orange-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-orange-700 shadow-md"
-                  >
-                    <Presentation className="w-4 h-4" /> Scarica PPTX / Google Slides
-                  </button>
-                </div>
-              </div>
-
-              {/* SLIDES GRID */}
-              <div className="space-y-12 pb-20">
-                 {plan.unitStrategies.map((unit, idx) => (
-                    <div key={idx}>
-                       <div className="flex items-center gap-4 mb-4">
-                          <div className="h-px bg-slate-300 flex-1"></div>
-                          <h4 className="font-bold text-slate-400 uppercase tracking-widest">{unit.unitName}</h4>
-                          <div className="h-px bg-slate-300 flex-1"></div>
-                       </div>
-                       
-                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                          {unit.slides.map((slide, sIdx) => (
-                             <div key={sIdx} className="bg-white aspect-[16/9] rounded-lg shadow-lg border border-slate-200 overflow-hidden relative group hover:ring-4 ring-indigo-100 transition-all">
-                                <SlideRenderer layout={selectedWireframe} content={slide} />
-                                
-                                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                   <span className="bg-black/50 text-white text-[10px] px-2 py-1 rounded">Slide {sIdx + 1}</span>
-                                </div>
-                             </div>
-                          ))}
-                       </div>
+           <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              
+              {/* Header Summary */}
+              <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                 <div className="flex justify-between items-start">
+                    <div>
+                      <h2 className="text-3xl font-bold text-slate-900 mb-2">{state.clientName}</h2>
+                      <div className="flex gap-4 text-sm text-slate-500">
+                         <span className="flex items-center gap-1"><Users className="w-4 h-4"/> Lead: {state.lead}</span>
+                         <span className="flex items-center gap-1"><Clock className="w-4 h-4"/> Durata Prevista: {plan.totalEstimatedDurationWeeks} settimane</span>
+                      </div>
                     </div>
-                 ))}
+                 </div>
+                 <div className="mt-6 bg-white p-4 rounded-lg border border-slate-100 italic text-slate-700">
+                    "{plan.strategicOverview}"
+                 </div>
               </div>
-           </div>
-        )}
 
-        {step === 5 && (
-           <div className="flex justify-center pb-10">
-              <button onClick={handleReset} className="px-8 py-3 bg-slate-800 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-slate-900 transition-colors">
-                <RefreshCw className="w-4 h-4" /> Nuovo Progetto
-              </button>
+              {/* UNIT CARDS GRID */}
+              <div>
+                 <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <Megaphone className="w-5 h-5 text-rose-500"/>
+                    Istruzioni per i Director
+                 </h3>
+                 
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {plan.unitStrategies.map((unit, idx) => (
+                       <div key={idx} className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-all">
+                          {/* Card Header */}
+                          <div className="bg-slate-50 border-b border-slate-100 p-4 flex justify-between items-center">
+                             <div>
+                                <h4 className="font-bold text-slate-800 uppercase tracking-wide">{unit.unitName}</h4>
+                                <span className="text-xs text-slate-500">Director: {unit.directorName}</span>
+                             </div>
+                             <button 
+                               onClick={() => downloadBrief(unit.unitName, unit.internalInstructions)}
+                               className="text-indigo-600 hover:bg-indigo-50 p-2 rounded-lg" title="Scarica Brief .txt"
+                             >
+                                <Download className="w-4 h-4" />
+                             </button>
+                          </div>
+
+                          {/* Instructions */}
+                          <div className="p-6 space-y-6">
+                             
+                             <div>
+                               <h5 className="text-xs font-bold text-slate-400 uppercase mb-2">To-Do List (Action Items)</h5>
+                               <ul className="space-y-2">
+                                  {unit.internalInstructions.map((inst, i) => (
+                                    <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
+                                       <span className="text-rose-500 font-bold">•</span> {inst}
+                                    </li>
+                                  ))}
+                               </ul>
+                             </div>
+
+                             <div className="grid grid-cols-2 gap-4">
+                               <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                                  <h5 className="text-[10px] font-bold text-indigo-500 uppercase mb-1">Output Richiesto</h5>
+                                  <ul className="space-y-1">
+                                    {unit.requiredOutput.map((out, i) => (
+                                       <li key={i} className="text-xs text-indigo-900 font-medium">{out}</li>
+                                    ))}
+                                  </ul>
+                               </div>
+                               <div className="bg-orange-50 p-3 rounded-lg border border-orange-100">
+                                  <h5 className="text-[10px] font-bold text-orange-500 uppercase mb-1">Vincoli & Note</h5>
+                                  <p className="text-xs text-orange-900">{unit.keyConstraints || "Nessun vincolo specifico."}</p>
+                               </div>
+                             </div>
+
+                          </div>
+                       </div>
+                    ))}
+                 </div>
+              </div>
+
+              <div className="flex justify-center pb-10">
+                <button onClick={handleReset} className="px-8 py-3 bg-slate-800 text-white rounded-xl font-bold flex items-center gap-2 hover:bg-slate-900 transition-colors">
+                  <RefreshCw className="w-4 h-4" /> Nuovo Progetto
+                </button>
+              </div>
+
            </div>
         )}
 
