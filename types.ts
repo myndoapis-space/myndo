@@ -31,6 +31,8 @@ export interface GenericRole {
   title: string;
   description: string;
   responsibilities: string[];
+  tools?: string[];
+  operational_flow?: string[];
 }
 
 export interface HierarchyNode {
@@ -78,6 +80,7 @@ export interface BriefingQuestion {
   type: 'text' | 'textarea' | 'number' | 'select';
   options?: string[];
   department?: Department; // If null, it's a general question
+  isCustom?: boolean;
 }
 
 export interface BriefingState {
@@ -85,19 +88,51 @@ export interface BriefingState {
   lead: 'Giulio' | 'Loris' | null;
   selectedDepartments: Department[];
   answers: Record<string, string>;
+  customQuestions?: BriefingQuestion[];
 }
 
-export interface UnitBrief {
+export interface SlideContent {
+  title: string;
+  subtitle?: string;
+  bullets: string[];
+  visualCue: string;
+}
+
+export interface UnitStrategy {
   unitName: string;
   directorName: string;
   keyRequirements: string[];
   estimatedHours: number;
   recommendedSuppliers: string[];
+  slides: SlideContent[];
 }
 
 export interface OperationalPlan {
   clientSummary: string;
   strategicOverview: string;
   macroTasks: { phase: string; tasks: string[] }[];
-  unitBriefs: UnitBrief[];
+  unitStrategies: UnitStrategy[];
+  totalEstimatedDurationWeeks: number;
+}
+
+export type MagicWandAction = 'expand' | 'shorten' | 'formalize' | 'bullet_points';
+
+export type WireframeLayout = 
+  | 'minimal_title' 
+  | 'title_subtitle' 
+  | 'bullet_list' 
+  | 'split_left_img' 
+  | 'split_right_img' 
+  | 'three_columns' 
+  | 'big_number' 
+  | 'quote_focus' 
+  | 'timeline' 
+  | 'grid_gallery' 
+  | 'center_focus' 
+  | 'dark_contrast';
+
+export interface WireframeOption {
+  id: WireframeLayout;
+  name: string;
+  preview: string; // CSS class description or SVG path
 }

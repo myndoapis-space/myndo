@@ -1,7 +1,7 @@
 
 import { GoogleGenAI } from "@google/genai";
 import { PEOPLE, WORKFLOW_STEPS } from "../constants";
-import { BriefingState, OperationalPlan } from "../types";
+import { BriefingState, OperationalPlan, MagicWandAction } from "../types";
 
 let aiClient: GoogleGenAI | null = null;
 
@@ -16,10 +16,10 @@ export const askProcessAdvisor = async (question: string): Promise<string> => {
   const flowContext = WORKFLOW_STEPS.map(s => `Step ${s.id} (${s.stage}): ${s.title} - ${s.description}`).join('\n');
 
   const systemInstruction = `
-    You are an expert Operations Consultant for a creative agency.
-    ROLES: ${roleContext}
+    Sei un esperto Operations Consultant per un'agenzia creativa.
+    RUOLI: ${roleContext}
     WORKFLOW: ${flowContext}
-    Answer based on this context.
+    Rispondi alle domande basandoti su questo contesto. RISPONDI SEMPRE IN ITALIANO.
   `;
 
   try {
@@ -31,44 +31,84 @@ export const askProcessAdvisor = async (question: string): Promise<string> => {
     return response.text || "No response generated.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Error generating response.";
+    return "Errore nella generazione della risposta.";
+  }
+};
+
+export const refineText = async (text: string, action: MagicWandAction): Promise<string> => {
+  if (!aiClient) return text;
+
+  const prompts: Record<MagicWandAction, string> = {
+    expand: "Espandi questo testo con dettagli professionali e contesto (in Italiano):",
+    shorten: "Sintetizza questo testo in modo conciso (in Italiano):",
+    formalize: "Riscrivi questo testo con un tono business formale (in Italiano):",
+    bullet_points: "Converti questo testo in una lista puntata (in Italiano):"
+  };
+
+  try {
+    const response = await aiClient.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: `${prompts[action]}\n\n"${text}"`
+    });
+    return response.text?.trim() || text;
+  } catch (error) {
+    console.error("Refine Text Error:", error);
+    return text;
   }
 };
 
 export const generateOperationalPlan = async (brief: BriefingState): Promise<OperationalPlan | null> => {
   if (!aiClient) return null;
 
+  // Include custom questions in the prompt
+  const customQ = brief.customQuestions?.map(q => `- ${q.text}: ${brief.answers[q.id] || 'N/A'}`).join('\n') || '';
+
   const prompt = `
-    Generate a detailed Operational Plan for a new client project.
+    Genera un Piano Operativo dettagliato per un nuovo progetto cliente. RISPONDI RIGOROSAMENTE IN ITALIANO.
     
-    CLIENT: ${brief.clientName}
+    CLIENTE: ${brief.clientName}
     LEAD: ${brief.lead}
-    ACTIVE DEPARTMENTS: ${brief.selectedDepartments.join(', ')}
+    DIPARTIMENTI ATTIVI: ${brief.selectedDepartments.join(', ')}
     
-    BRIEF ANSWERS:
+    RISPOSTE BRIEF:
     ${Object.entries(brief.answers).map(([key, val]) => `- ${key}: ${val}`).join('\n')}
+    ${customQ}
     
-    AGENCY DIRECTORS MAP:
+    MAPPA DIRECTOR AGENZIA:
     - Creative: Paolo Ferrigno
     - Events: Lorena Mele
     - Media: Massimiliano Palombi
     - Digital: Exec Digital / Giacomo Neri
     - Strategic: Roberta Gasperoni
     
-    OUTPUT JSON FORMAT ONLY:
+    TASK:
+    1. Analizza il brief.
+    2. Definisci una strategia di alto livello.
+    3. Suddividi in macro task.
+    4. Per OGNI dipartimento attivo, genera una 'Unit Strategy' che includa:
+       - Assegnazione Director.
+       - Requisiti chiave.
+       - Ore stimate.
+       - 3 CONCEPT SLIDE per una presentazione (Titolo, Sottotitolo, Bullet points, Suggerimento Visual).
+    
+    FORMATO OUTPUT JSON (Solo JSON, niente markdown):
     {
-      "clientSummary": "Brief summary of client needs",
-      "strategicOverview": "High level strategy approach",
+      "clientSummary": "string",
+      "strategicOverview": "string",
+      "totalEstimatedDurationWeeks": number,
       "macroTasks": [
          { "phase": "string", "tasks": ["string"] }
       ],
-      "unitBriefs": [
+      "unitStrategies": [
         {
-          "unitName": "string (e.g. Creative Unit)",
-          "directorName": "string (The correct director from list)",
-          "keyRequirements": ["string (specific tasks for this unit based on answers)"],
+          "unitName": "string",
+          "directorName": "string",
+          "keyRequirements": ["string"],
           "estimatedHours": number,
-          "recommendedSuppliers": ["string (suggest generic types e.g. Video Production, Catering, Hosting)"]
+          "recommendedSuppliers": ["string"],
+          "slides": [
+            { "title": "string", "subtitle": "string", "bullets": ["string"], "visualCue": "descrizione immagine/layout" }
+          ]
         }
       ]
     }

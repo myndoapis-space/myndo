@@ -1,10 +1,18 @@
 
 import React, { useState } from 'react';
 import { PEOPLE, GENERIC_ROLES } from '../constants';
-import { User, Briefcase } from 'lucide-react';
+import { User, Briefcase, Settings, ArrowDown, Database, Cloud, MessageSquare, Monitor } from 'lucide-react';
 
 const RolesDictionary: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'people' | 'responsibilities'>('people');
+
+  const getToolIcon = (t: string) => {
+    if (t.toLowerCase().includes('cronos')) return <Database className="w-3 h-3" />;
+    if (t.toLowerCase().includes('drive') || t.toLowerCase().includes('cloud')) return <Cloud className="w-3 h-3" />;
+    if (t.toLowerCase().includes('teams')) return <MessageSquare className="w-3 h-3" />;
+    if (t.toLowerCase().includes('canva') || t.toLowerCase().includes('gamma')) return <Monitor className="w-3 h-3" />;
+    return <Settings className="w-3 h-3" />;
+  };
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 pb-10">
@@ -72,28 +80,83 @@ const RolesDictionary: React.FC = () => {
 
       {/* RESPONSIBILITIES TAB */}
       {activeTab === 'responsibilities' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-8">
           {GENERIC_ROLES.map(role => (
-            <div key={role.id} className="bg-slate-50 rounded-xl border border-slate-200 p-6">
-               <div className="flex items-center gap-3 mb-4">
-                 <div className="p-3 bg-white rounded-lg shadow-sm">
-                    <Briefcase className="w-6 h-6 text-slate-700" />
+            <div key={role.id} className="bg-white rounded-xl border border-slate-200 p-8 shadow-sm">
+               <div className="flex flex-col md:flex-row gap-8">
+                 
+                 {/* Role Header & Summary */}
+                 <div className="md:w-1/3 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 bg-indigo-50 rounded-xl">
+                          <Briefcase className="w-6 h-6 text-indigo-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-slate-900">{role.title}</h3>
+                        <p className="text-xs text-slate-500 font-medium">{role.description}</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Responsabilità Core</h4>
+                      <ul className="space-y-2">
+                        {role.responsibilities.map((r, i) => (
+                          <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
+                              <span className="text-indigo-400">•</span> {r}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {role.tools && (
+                      <div className="mt-4">
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Tech Stack</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {role.tools.map((t, i) => (
+                            <span key={i} className="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] font-bold text-slate-600 flex items-center gap-1 shadow-sm">
+                              {getToolIcon(t)} {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                  </div>
-                 <div>
-                   <h3 className="text-lg font-bold text-slate-900">{role.title}</h3>
-                   <p className="text-xs text-slate-500">{role.description}</p>
+
+                 {/* Divider */}
+                 <div className="hidden md:block w-px bg-slate-100"></div>
+
+                 {/* Operational Flow */}
+                 <div className="flex-1">
+                    <h4 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                      <Settings className="w-4 h-4 text-indigo-500" /> Flusso Operativo Quotidiano
+                    </h4>
+                    
+                    {role.operational_flow ? (
+                      <div className="space-y-0 relative">
+                        {role.operational_flow.map((step, i) => (
+                          <div key={i} className="flex gap-4 relative pb-6 last:pb-0">
+                             {/* Line */}
+                             {i !== role.operational_flow!.length - 1 && (
+                               <div className="absolute top-8 left-3.5 bottom-0 w-px bg-slate-200"></div>
+                             )}
+                             
+                             {/* Number Bubble */}
+                             <div className="flex-shrink-0 w-7 h-7 bg-indigo-50 border border-indigo-100 rounded-full flex items-center justify-center text-xs font-bold text-indigo-600 z-10">
+                               {i + 1}
+                             </div>
+                             
+                             {/* Content */}
+                             <div className="pt-1">
+                               <p className="text-sm text-slate-600 leading-relaxed">{step}</p>
+                             </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-slate-400 italic">Nessun flusso dettagliato disponibile.</p>
+                    )}
                  </div>
-               </div>
-               
-               <div className="bg-white rounded-lg border border-slate-200 p-4">
-                 <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Cosa fa in Agenzia</h4>
-                 <ul className="space-y-2">
-                   {role.responsibilities.map((r, i) => (
-                     <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                        <span className="text-slate-300">•</span> {r}
-                     </li>
-                   ))}
-                 </ul>
+
                </div>
             </div>
           ))}

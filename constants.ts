@@ -5,10 +5,10 @@ export const PEOPLE: AgencyRole[] = [
   // --- CEO & ADMIN ---
   {
     id: 'ceo',
-    name: 'Sara Serafini (CEO)',
+    name: 'Loris Zanelli (CEO)',
     type: RoleType.CEO,
-    responsibilities: ['Visione Aziendale', 'Supervisione Generale'],
-    color: 'bg-slate-800',
+    responsibilities: ['Visione Aziendale', 'Supervisione Commerciale', 'Client Director'],
+    color: 'bg-slate-900',
     skills: ['Overall'],
   },
   {
@@ -27,13 +27,7 @@ export const PEOPLE: AgencyRole[] = [
     responsibilities: ['Lead Generation', 'Client Director', 'Input al COO'],
     color: 'bg-blue-600',
   },
-  {
-    id: 'loris',
-    name: 'Loris',
-    type: RoleType.COMMERCIAL,
-    responsibilities: ['Lead Generation', 'Client Director', 'Input al COO'],
-    color: 'bg-indigo-600',
-  },
+  // Loris is listed as CEO above, but also acts as Client Director in flows.
   
   // --- COO ---
   {
@@ -167,53 +161,136 @@ export const PEOPLE: AgencyRole[] = [
 
 export const GENERIC_ROLES: GenericRole[] = [
   {
-    id: 'ceo_role',
-    title: 'CEO',
-    description: 'Vertice aziendale.',
-    responsibilities: ['Visione strategica', 'Supervisione finanziaria', 'Decision making finale']
-  },
-  {
-    id: 'client_director',
-    title: 'Client Director (Commerciale)',
-    description: 'Responsabile acquisizione e relazione alto livello.',
-    responsibilities: ['Lead Generation', 'Briefing iniziale', 'Validazione Pricing con Account']
-  },
-  {
-    id: 'coo_role',
-    title: 'COO (Direzione Traffico)',
-    description: 'Orchestratore operativo.',
-    responsibilities: ['Analisi Brief', 'Attivazione Director di reparto', 'Scelta Account Manager', 'Supporto scelta Task Force']
-  },
-  {
-    id: 'account_manager',
+    id: 'role_account',
     title: 'Account Manager',
-    description: 'Gestore del cliente e del progetto.',
-    responsibilities: ['Interfaccia Cliente', 'Creazione Preventivo (Cronos)', 'Creazione Slide (Canva/Gamma)', 'Setup Commessa Cronos', 'Lead Task Force']
+    description: 'Gestore operativo e finanziario della commessa.',
+    responsibilities: [
+      'Interfaccia principale con il Cliente',
+      'Responsabile della marginalità del progetto',
+      'Guida la Task Force operativa'
+    ],
+    tools: ['Cronos', 'OneDrive', 'Teams', 'Canva/Gamma'],
+    operational_flow: [
+      'Riceve strategia e crea il PREVENTIVO su Cronos (inserendo fornitori esterni e fee agenzia).',
+      'Prepara il DECK di proposta (Canva/Gamma) e lo carica su OneDrive.',
+      'A progetto vinto, converte il preventivo in COMMESSA su Cronos.',
+      'Definisce i MACRO-TASK (Fasi) e i MICRO-TASK (Azioni) su Cronos con l\'Executive Director.',
+      'Gestisce le richieste fornitori (Ordini di Acquisto) e carica fatture pro-forma su OneDrive.',
+      'Controlla settimanalmente lo stato avanzamento lavori su Cronos.'
+    ]
   },
   {
-    id: 'director',
-    title: 'Director di Area',
-    description: 'Responsabile strategico di dipartimento.',
-    responsibilities: ['Strategia verticale', 'Innovazione di reparto', 'Supporto all\'Account in fase proposta']
+    id: 'role_coo',
+    title: 'COO (Chief Operating Officer)',
+    description: 'Orchestratore del traffico e delle risorse.',
+    responsibilities: [
+      'Analisi iniziale del Brief',
+      'Assegnazione risorse chiave',
+      'Problem solving su conflitti di risorse'
+    ],
+    tools: ['Teams', 'Cronos (Report)', 'Email'],
+    operational_flow: [
+      'Riceve input dal Commerciale (Giulio/Loris).',
+      'Attiva i Director di Area necessari (The Hub).',
+      'Nomina l\'Account Manager più adatto per skill.',
+      'Valida la composizione della Task Force proposta dall\'Account.',
+      'Supervisiona il carico di lavoro globale dell\'agenzia.'
+    ]
   },
   {
-    id: 'executive_director',
+    id: 'role_director',
+    title: 'Director (Creative, Media, Events, Tech)',
+    description: 'Responsabile della qualità strategica e output di reparto.',
+    responsibilities: [
+      'Definizione della strategia verticale',
+      'Innovazione',
+      'Supporto all\'Account in fase di vendita'
+    ],
+    tools: ['Teams', 'OneDrive', 'Tool Specifici (es. Meta Ads, Adobe Suite)'],
+    operational_flow: [
+      'Riceve attivazione dal COO.',
+      'Produce la strategia di reparto (es. Media Plan, Creative Concept).',
+      'Carica i materiali strategici su OneDrive nella cartella di progetto.',
+      'Delega l\'esecuzione operativa all\'Executive Director.',
+      'Interviene in meeting strategici con il cliente.'
+    ]
+  },
+  {
+    id: 'role_executive',
     title: 'Executive Director',
-    description: 'Coordinatore tecnico del team operativo.',
-    responsibilities: ['Non è un capo gerarchico ma funzionale', 'Definizione Ore/Micro-task con Account', 'Controllo avanzamento lavori', 'Qualità output']
+    description: 'Coordinatore tecnico e garante dei tempi.',
+    responsibilities: [
+      'Validazione tecnica dei micro-task',
+      'Controllo qualità output',
+      'Monitoraggio ore team'
+    ],
+    tools: ['Cronos', 'Teams'],
+    operational_flow: [
+      'Affianca l\'Account nella definizione dei Micro-Task su Cronos.',
+      'Stima le ore necessarie per ogni task operativo.',
+      'Assegna i task ai singoli operativi (Specialism) su Cronos.',
+      'Controlla che il team logghi correttamente le ore (Timesheet).',
+      'Verifica che l\'output rispetti gli standard prima della consegna all\'Account.'
+    ]
   },
   {
-    id: 'specialism',
-    title: 'Specialism / Operativo',
-    description: 'Esecutore tecnico.',
-    responsibilities: ['Esecuzione task', 'Compilazione Timesheet su Cronos', 'Partecipazione Task Force']
+    id: 'role_operative',
+    title: 'Specialism (Grafico, SMM, Dev)',
+    description: 'Esecutore materiale del progetto.',
+    responsibilities: [
+      'Produzione output',
+      'Rispetto delle deadline',
+      'Compilazione Timesheet'
+    ],
+    tools: ['Cronos', 'OneDrive', 'Adobe/Dev Tools', 'Teams'],
+    operational_flow: [
+      'Riceve notifica del Micro-Task su Cronos.',
+      'Esegue il lavoro (Grafica, Post, Codice).',
+      'Carica i file definitivi su OneDrive (NO Desktop locale).',
+      'Compila il Timesheet giornaliero su Cronos associandolo al Micro-Task.',
+      'Comunica aggiornamenti veloci via Teams chat di progetto.'
+    ]
+  },
+  {
+    id: 'role_admin',
+    title: 'Amministrazione (Simona Massi)',
+    description: 'Gestione flussi finanziari e fatturazione.',
+    responsibilities: [
+      'Emissione Fatture attive',
+      'Registrazione Fatture passive',
+      'Controllo flussi di cassa'
+    ],
+    tools: ['Gestionale Contabile', 'Cronos (Report)', 'Home Banking'],
+    operational_flow: [
+      'Riceve notifica da Account quando un preventivo diventa Commessa Confermata.',
+      'Emette fattura di acconto (se prevista).',
+      'Raccoglie fatture fornitori approvate dagli Account.',
+      'Esegue review mensile con il CEO sui flussi.'
+    ]
+  },
+  {
+    id: 'role_ceo',
+    title: 'CEO (Loris Zanelli)',
+    description: 'Guida strategica e commerciale.',
+    responsibilities: [
+      'Sviluppo Business',
+      'Relazione Clienti Key',
+      'Visione a lungo termine'
+    ],
+    tools: ['Teams', 'Outlook', 'Cronos (Dashboard)'],
+    operational_flow: [
+      'Ingaggia nuovi clienti (Lead Generation).',
+      'Agisce come Client Director sui clienti strategici.',
+      'Definisce gli obiettivi annuali di fatturato.',
+      'Supervisiona i report finanziari mensili con l\'Amministrazione.'
+    ]
   }
 ];
 
 export const HIERARCHY: HierarchyNode[] = [
   {
     id: 'ceo_root',
-    title: 'Sara Serafini (CEO)',
+    title: 'Loris Zanelli (CEO)',
     children: [
       {
         id: 'admin_node',
